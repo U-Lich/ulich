@@ -1,6 +1,6 @@
 import WeekOfCourses from "./WeekOfCourses";
 import Course from "./Course";
-import { WorkBook } from "sheetjs-style";
+import ExcelJS from "exceljs";
 import GenerateSpreadsheet from "./SpreadsheetProccessor";
 
 const TXT_REGEX = /[\p{L}\d][\p{L}\p{M}\d, _-]+[\p{L}\p{M}\d]/ug;
@@ -37,7 +37,7 @@ export default class Schedule {
         }
     }
 
-    ParseRawULAWSchedule(): WorkBook | null {
+    ParseRawULAWSchedule(): ExcelJS.Workbook | null {
         if (this.#IsValidRawData()) {
             let parsedData: {
                 courseName: string[] | null,
@@ -83,7 +83,7 @@ export default class Schedule {
                     }
                 }
 
-                return GenerateSpreadsheet(this.weeks);
+                return GenerateSpreadsheet(this);
             }
 
             return null;

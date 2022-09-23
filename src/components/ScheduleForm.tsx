@@ -1,10 +1,10 @@
-import { writeFile } from 'sheetjs-style';
+import { saveAs } from 'file-saver';
 import React from 'react';
 import Schedule from './Schedule';
 import FormDefaultValues from '../constants/FormDefaultValues.json';
-import { ToUnicode } from './VniConverter';
 
 export default class ScheduleForm extends React.Component {
+    blobType: string = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     scheduleObj: Schedule;
     state: {
         tableName: string,
@@ -35,7 +35,7 @@ export default class ScheduleForm extends React.Component {
 
     handleChange(event: any) {
         const target = event.target;
-        const value = ToUnicode(target.value);
+        const value = target.value;
         const name = target.name;
 
         this.setState({
@@ -56,8 +56,10 @@ export default class ScheduleForm extends React.Component {
 
         let workbook = this.scheduleObj.ParseRawULAWSchedule();
         if (workbook != null) {
-            console.log(workbook);
-            writeFile(workbook, "Summary.xlsx");
+            workbook.xlsx.writeBuffer().then(data => {
+                const blob = new Blob([data], { type: this.blobType });
+                saveAs(blob, "Summary.xlsx");
+            });
         }
     }
 

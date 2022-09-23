@@ -7,8 +7,6 @@ export default class Course {
     weeks: number[];
 
     constructor(name: string, type: string, day: string, period: string, week: string) {
-        // this.parseAvailablePeriods = this.parseAvailablePeriods.bind(this);
-        // this.parseAvailableWeeks = this.parseAvailableWeeks.bind(this);
         this.name = name;
         this.type = type;
 
