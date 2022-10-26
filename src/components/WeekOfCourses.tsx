@@ -1,17 +1,7 @@
 import Course from "./Course";
 
 class WeekOfCourses {
-    static #MAX_NUM_PERIODS = 12;
-
-    static #labels = [
-        "TUẦN",
-        "CA",
-        "THỨ HAI",
-        "THỨ BA",
-        "THỨ TƯ",
-        "THỨ NĂM",
-        "THỨ SÁU"
-    ];
+    static MAX_NUM_PERIODS = 12;
 
     static #dotw = [
         {name: "Thứ Hai", value: 0},
@@ -46,15 +36,15 @@ class WeekOfCourses {
     }
 
     ToArray(): any[] {
-        let weekArray = new Array(WeekOfCourses.#MAX_NUM_PERIODS + 1);
-        weekArray[0] = WeekOfCourses.#labels; 
+        let weekArray = new Array(WeekOfCourses.MAX_NUM_PERIODS);
+        // weekArray[0] = WeekOfCourses.#labels; 
     
         let shiftEq = (x: number) => {return (2 * x + 2 - ( 1 + Math.pow(-1, x))) / 4};
 
-        for (let i = 1; i <= WeekOfCourses.#MAX_NUM_PERIODS; i++) {
+        for (let i = 0; i < WeekOfCourses.MAX_NUM_PERIODS; i++) {
             weekArray[i] = [];
             weekArray[i][0] = String(this.weekNumber);
-            weekArray[i][1] = String(shiftEq(i));
+            weekArray[i][1] = String(shiftEq(i + 1));
 
             for (let day of WeekOfCourses.#dotw) {
 
@@ -62,7 +52,7 @@ class WeekOfCourses {
 
                 for (let course of this.courses[day.name]) {
 
-                    if (course.periods.includes(i)) {
+                    if (course.periods.includes(i + 1)) {
                         weekArray[i][day.value + 2] = String(course.name) + (course.type === "Thảo luận" ? " (TL)" : "");
                     }
                 }
@@ -75,10 +65,10 @@ class WeekOfCourses {
         let startRow = 13 * this.weekNumber - 11; // x + 1 + 12 * (x - 1 )
         let arr = [{
             s: { r: startRow, c: 0 },
-            e: { r: startRow + WeekOfCourses.#MAX_NUM_PERIODS - 1, c: 0 }
+            e: { r: startRow + WeekOfCourses.MAX_NUM_PERIODS - 1, c: 0 }
         }];
 
-        for (let i = 0; i < WeekOfCourses.#MAX_NUM_PERIODS; i += 2) {
+        for (let i = 0; i < WeekOfCourses.MAX_NUM_PERIODS; i += 2) {
             arr.push({
                 s: { r: i + startRow, c: 1 },
                 e: { r: i + startRow + 1, c: 1 }
@@ -100,7 +90,7 @@ class WeekOfCourses {
 
             next() {
                 let result;
-                if (nextRow < WeekOfCourses.#MAX_NUM_PERIODS) {
+                if (nextRow < WeekOfCourses.MAX_NUM_PERIODS) {
                     result = {
                         s: { r: nextRow, c: 0 },
                         e: { r: nextRow, c: 6 }
