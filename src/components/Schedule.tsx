@@ -1,12 +1,8 @@
 import WeekOfCourses from "./WeekOfCourses";
 import Course from "./Course";
-import ExcelJS from "exceljs";
-import GenerateSpreadsheet from "./SpreadsheetProccessor";
 import { HEADER_TYPES } from "../constants/HeaderTypes";
 import * as d3 from "d3";
 
-const TXT_REGEX = /[\p{L}\d][\p{L}\p{M}\d, _-]+[\p{L}\p{M}\d]/ug;
-const NUM_REGEX = /[\p{N}_-]+/ug;
 const NUM_WEEK = 21;
 
 export type ScheduleHeader = {
@@ -113,7 +109,6 @@ export class Schedule {
                 }
             });
             
-            // TODO: return TRUE OR FALSE on SUCCESS or FAILURE. Originally return Spreadsheet which is dumb and not coherent
             if (this.headers.cName.validity && this.headers.cDates.validity && this.headers.cPeriods.validity && this.headers.cWeeks.validity) {
                 return this.ParseWeeks();
             }
@@ -121,7 +116,6 @@ export class Schedule {
             return false;
         } catch (error) {
             this._isValidSchedule = false;
-
             console.log("Error parsing schedule: " + error);
 
             return false;
