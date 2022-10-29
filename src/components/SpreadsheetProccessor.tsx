@@ -7,7 +7,7 @@ import {
     FORMAT_TITLE_CELL } 
         from "../constants/SpreadsheetStyling";
 
-import Schedule from "./Schedule";
+import { Schedule } from "./Schedule";
 import WeekOfCourses from "./WeekOfCourses";
 
 const SHEET_COLUMN_COUNT = 7;

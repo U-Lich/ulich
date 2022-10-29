@@ -1,6 +1,6 @@
 import { saveAs } from 'file-saver';
 import React from 'react';
-import Schedule from './Schedule';
+import { Schedule } from './Schedule';
 import FormDefaultValues from '../constants/FormDefaultValues.json';
 import GenerateSpreadsheet from './SpreadsheetProccessor';
 

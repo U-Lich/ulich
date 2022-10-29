@@ -14,13 +14,14 @@ class WeekOfCourses {
     weekNumber: number;
     startingWeek: number;
     endingWeek: number;
-    courses: { [name: string]: Course[] };
-    //     "Thứ Hai": [],
-    //     "Thứ Ba": [],
-    //     "Thứ Tư": [],
-    //     "Thứ Năm": [],
-    //     "Thứ Sáu": []
-    // };
+    courses: { 
+        [name: string]: Course[],
+        "Thứ Hai": [],
+        "Thứ Ba": [],
+        "Thứ Tư": [],
+        "Thứ Năm": [],
+        "Thứ Sáu": []
+    };
 
     constructor(week: number, from: number) {
         this.weekNumber = week;
