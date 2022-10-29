@@ -2,17 +2,14 @@ import { saveAs } from 'file-saver';
 import React from 'react';
 import Schedule from './Schedule';
 import FormDefaultValues from '../constants/FormDefaultValues.json';
+import GenerateSpreadsheet from './SpreadsheetProccessor';
 
 export default class ScheduleForm extends React.Component {
     blobType: string = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     scheduleObj: Schedule;
     state: {
         tableName: string,
-        courseName: string,
-        courseType: string,
-        courseDay: string,
-        coursePeriod: string,
-        courseWeek: string
+        rawPastebin: string
     };
 
     constructor(props: any) {
@@ -22,11 +19,7 @@ export default class ScheduleForm extends React.Component {
 
         this.state = {
             tableName: FormDefaultValues.table_name,
-            courseName: FormDefaultValues.course_name,
-            courseType: FormDefaultValues.course_type,
-            courseDay: FormDefaultValues.course_day,
-            coursePeriod: FormDefaultValues.course_period,
-            courseWeek: FormDefaultValues.course_week
+            rawPastebin: FormDefaultValues.raw_pastebin
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -47,19 +40,19 @@ export default class ScheduleForm extends React.Component {
         event.preventDefault();
 
         this.scheduleObj.scheduleName = this.state.tableName;
+        this.scheduleObj.rawPastebin = this.state.rawPastebin;
 
-        this.scheduleObj.rawData.courseName = this.state.courseName;
-        this.scheduleObj.rawData.courseType = this.state.courseType;
-        this.scheduleObj.rawData.courseDay = this.state.courseDay;
-        this.scheduleObj.rawData.coursePeriod = this.state.coursePeriod;
-        this.scheduleObj.rawData.courseWeek = this.state.courseWeek;
-
-        let workbook = this.scheduleObj.ParseRawULAWSchedule();
-        if (workbook != null) {
-            workbook.xlsx.writeBuffer().then(data => {
-                const blob = new Blob([data], { type: this.blobType });
-                saveAs(blob, "Summary.xlsx");
-            });
+        if (this.scheduleObj.ParseRawULAWSchedule()) {
+            let workbook = GenerateSpreadsheet(this.scheduleObj);
+            if (workbook != null) {
+                workbook.xlsx.writeBuffer().then(data => {
+                    const blob = new Blob([data], { type: this.blobType });
+                    saveAs(blob, "Summary.xlsx");
+                });
+            }
+        } else {
+            // TODO: Generate exception pop up if false
+            alert("Unimplemented exception message: 'Parse schedule failed, check console!'");
         }
     }
 
@@ -67,14 +60,8 @@ export default class ScheduleForm extends React.Component {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
-                <textarea className="paste-area" value={this.state.tableName}     name="tableName"    onChange={this.handleChange}/>
-                </form>
-                <form onSubmit={this.handleSubmit}>
-                <textarea className="paste-area" value={this.state.courseName}    name="courseName"   onChange={this.handleChange}/>
-                <textarea className="paste-area" value={this.state.courseType}    name="courseType"   onChange={this.handleChange}/>
-                <textarea className="paste-area" value={this.state.courseDay}     name="courseDay"    onChange={this.handleChange}/>
-                <textarea className="paste-area" value={this.state.coursePeriod}  name="coursePeriod" onChange={this.handleChange}/>
-                <textarea className="paste-area" value={this.state.courseWeek}    name="courseWeek"   onChange={this.handleChange}/>
+                <textarea className="paste-area" value={this.state.tableName}       name="tableName"    onChange={this.handleChange}/>
+                <textarea className="paste-area" value={this.state.rawPastebin}     name="rawPastebin"    onChange={this.handleChange}/>
                 <button type="submit">Submit</button>
                 </form>
             </div>

@@ -2,32 +2,19 @@ import WeekOfCourses from "./WeekOfCourses";
 import Course from "./Course";
 import ExcelJS from "exceljs";
 import GenerateSpreadsheet from "./SpreadsheetProccessor";
+import * as d3 from "d3";
 
 const TXT_REGEX = /[\p{L}\d][\p{L}\p{M}\d, _-]+[\p{L}\p{M}\d]/ug;
 const NUM_REGEX = /[\p{N}_-]+/ug;
 const NUM_WEEK = 21;
 
 export default class Schedule {
-    rawData: {
-        courseName: string,
-        courseType: string,
-        courseDay: string,
-        coursePeriod: string,
-        courseWeek: string
-    };
-
     scheduleName: string;
+    rawPastebin: string;
     weeks: WeekOfCourses[];
 
     constructor() {
-        this.rawData = {
-            courseName: "",
-            courseType: "",
-            courseDay: "",
-            coursePeriod: "",
-            courseWeek: ""
-        };
-
+        this.rawPastebin = "";
         this.scheduleName = "";
 
         this.weeks = [];
@@ -37,59 +24,35 @@ export default class Schedule {
         }
     }
 
-    ParseRawULAWSchedule(): ExcelJS.Workbook | null {
+    ParseRawULAWSchedule(): boolean {
         if (this.#IsValidRawData()) {
-            let parsedData: {
-                courseName: string[] | null,
-                courseType: string[] | null,
-                courseDay: string[] | null,
-                coursePeriod: string[] | null,
-                courseWeek: string[] | null
-            } = {
-                courseName: [],
-                courseType: [],
-                courseDay: [],
-                coursePeriod: [],
-                courseWeek: []
-            };
+            // TODO: Optimize this
+            let extraSpaceRegex = / \ +/gm;
+            let whitespaceInQuotationRegex = /\".+[\s\d]*\"/gm;
             
-            // regex parse
-            parsedData.courseName = this.rawData.courseName.match(TXT_REGEX);
-            parsedData.courseType = this.rawData.courseType.match(TXT_REGEX);
-            parsedData.courseDay = this.rawData.courseDay.match(TXT_REGEX);
-            parsedData.coursePeriod = this.rawData.coursePeriod.match(NUM_REGEX);
-            parsedData.courseWeek = this.rawData.courseWeek.match(NUM_REGEX);
-            let parsedCourse;
+            let quotationBlock: string;
+            Array.from(this.rawPastebin.matchAll(whitespaceInQuotationRegex)).forEach(element => {
+                quotationBlock = element[0].replace(/\"/gm, "");
+                quotationBlock = quotationBlock.replace(/\f+|\r+|\n+|\t+|\v+/gm, " ");
+                
+                this.rawPastebin = this.rawPastebin.replace(element[0], quotationBlock);
+            });
 
-            let noOCourse: number = 0;
-            if (parsedData.courseName != null && 
-                parsedData.courseType != null &&
-                parsedData.courseDay != null &&
-                parsedData.coursePeriod != null &&
-                parsedData.courseWeek != null
-            ) {
-                noOCourse = parsedData.courseName.length;
-                for (let i = 0; i < noOCourse; i++) {
-                    parsedCourse = new Course(
-                        parsedData.courseName[i], 
-                        parsedData.courseType[i], 
-                        parsedData.courseDay[i], 
-                        parsedData.coursePeriod[i], 
-                        parsedData.courseWeek[i]
-                    );
-    
-                    for (let avail of parsedCourse.weeks) {
-                        this.weeks[avail - 1].courses[parsedCourse.date].push(parsedCourse);
-                    }
-                }
+            this.rawPastebin = this.rawPastebin.replaceAll(extraSpaceRegex, "").trim();
+      
+            // header parse
+            let headerSplit = this.rawPastebin.match(/\n/s);
+            this.rawPastebin = this.rawPastebin.slice(0, headerSplit?.index).replaceAll(/ *\d+/g, "").concat(this.rawPastebin.slice(headerSplit?.index));
 
-                return GenerateSpreadsheet(this);
-            }
+            let df = d3.tsvParse(this.rawPastebin);
+            console.log(df);
 
-            return null;
+            return false;
         }
 
-        return null;
+        // TODO: return TRUE OR FALSE on SUCCESS or FAILURE. Originally return Spreadsheet which is dumb and not coherent
+
+        return false;
     }
 
     /**
@@ -97,6 +60,7 @@ export default class Schedule {
      * @returns {boolean} true if the loaded raw data is valid
      */
     #IsValidRawData(): boolean {
+        // TODO: Implement this!
         return true;
     }
 }
