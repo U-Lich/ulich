@@ -32,9 +32,11 @@ export class Schedule {
     public scheduleName: string;
     public rawPastebin: string;
     public weeks: WeekOfCourses[];
+    
+    private df: d3.DSVRowArray<string> | undefined;
     private headers: ScheduleHeaders;
-
     private _isValidSchedule: boolean;
+
     get isValidSchedule() {return this._isValidSchedule;}
 
     constructor() {
@@ -42,6 +44,7 @@ export class Schedule {
         this.scheduleName = "";
         this.headers = HEADER_TYPES;
         this._isValidSchedule = false;
+        this.df = undefined;
 
         this.weeks = [];
         let currentDate = Date.now();
@@ -52,12 +55,21 @@ export class Schedule {
 
     private ParseWeeks(): boolean {
         try {
-            // let currentDate = Date.now();
+            let parsedCourse: Course;
+            this.df?.forEach(row => {
+                parsedCourse = new Course(
+                    row[this.headers.cName.key]!,
+                    this.headers.cType.validity? row[this.headers.cType.key]! : undefined,
+                    row[this.headers.cDates.key]!,
+                    row[this.headers.cPeriods.key]!,
+                    row[this.headers.cWeeks.key]!
+                )
 
-            // this.weeks.forEach(week => {
-            //     week.courses["Thứ Hai"].
-            // });
-
+                for (let avail of parsedCourse.weeks) {
+                    this.weeks[avail - 1].courses[parsedCourse.date].push(parsedCourse);
+                }
+            });
+            
             return true;
         } catch (error) {
             console.log("Error parsing weeks: " + error);
@@ -85,21 +97,22 @@ export class Schedule {
             let headerSplit = this.rawPastebin.match(/\n/s);
             this.rawPastebin = this.rawPastebin.slice(0, headerSplit?.index).replaceAll(/ *\d+/g, "").concat(this.rawPastebin.slice(headerSplit?.index));
 
-            let df = d3.tsvParse(this.rawPastebin);
+            this.df = d3.tsvParse(this.rawPastebin);
             
             // header recognition
             Object.entries(this.headers).forEach(entry => {
                 this.headers[entry[0]].validity = false;
+
                 for (let synonym in entry[1].value) {
-                    if (df.columns.includes(synonym)) {
-                        this.headers[entry[0]].key = synonym;
+                    if (this.df?.columns.includes(entry[1].value[synonym])) {
+                        this.headers[entry[0]].key = entry[1].value[synonym];
                         this.headers[entry[0]].validity = true;
                         
                         break;
                     }
                 }
             });
-
+            
             // TODO: return TRUE OR FALSE on SUCCESS or FAILURE. Originally return Spreadsheet which is dumb and not coherent
             if (this.headers.cName.validity && this.headers.cDates.validity && this.headers.cPeriods.validity && this.headers.cWeeks.validity) {
                 return this.ParseWeeks();

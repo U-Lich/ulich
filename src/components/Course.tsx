@@ -6,9 +6,9 @@ export default class Course {
     periods: number[];
     weeks: number[];
 
-    constructor(name: string, type: string, day: string, period: string, week: string) {
+    constructor(name: string, type: string | undefined, day: string, period: string, week: string) {
         this.name = name;
-        this.type = type;
+        this.type = type === undefined ? "Lý thuyết" : type;
 
         this.date = day;
         this.periods = this.#parseAvailablePeriods(period);
