@@ -12,8 +12,7 @@ class WeekOfCourses {
     ];
 
     weekNumber: number;
-    startingWeek: number;
-    endingWeek: number;
+    weekDate: Date;
     courses: { 
         [name: string]: Course[],
         "Thứ Hai": [],
@@ -23,10 +22,9 @@ class WeekOfCourses {
         "Thứ Sáu": []
     };
 
-    constructor(week: number, from: number) {
+    constructor(week: number, from: Date) {
         this.weekNumber = week;
-        this.startingWeek = from;
-        this.endingWeek = from; // TODO: + something
+        this.weekDate = from; // TODO: + something
         this.courses = {
             "Thứ Hai": [],
             "Thứ Ba": [],
@@ -38,13 +36,15 @@ class WeekOfCourses {
 
     ToArray(): any[] {
         let weekArray = new Array(WeekOfCourses.MAX_NUM_PERIODS);
-        // weekArray[0] = WeekOfCourses.#labels; 
     
         let shiftEq = (x: number) => {return (2 * x + 2 - ( 1 + Math.pow(-1, x))) / 4};
 
+        let tempWeek = new Date(this.weekDate);
+        let weekTo = new Date(tempWeek.setDate(tempWeek.getDate() + 4));
+
         for (let i = 0; i < WeekOfCourses.MAX_NUM_PERIODS; i++) {
             weekArray[i] = [];
-            weekArray[i][0] = String(this.weekNumber);
+            weekArray[i][0] = String(this.weekNumber) + '\n' + this.weekDate.toISOString().substring(0, 10) + '\n' + '-' + '\n' + weekTo.toISOString().substring(0, 10);
             weekArray[i][1] = String(shiftEq(i + 1));
 
             for (let day of WeekOfCourses.#dotw) {

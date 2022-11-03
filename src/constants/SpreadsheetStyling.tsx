@@ -3,7 +3,7 @@ import { Style } from 'exceljs';
 export const FORMAT_CELL_SIZE = {
     WIDTH: {
         DEFAULT: 25,    // default width of cells
-        FIRST_COL: 10,  // width of the first column
+        FIRST_COL: 16,  // width of the first column
         SECOND_COL: 6   // width of the second column
     },
     HEIGHT: {
@@ -36,7 +36,7 @@ export const FORMAT_HEADER_CELL: Partial<Style> = {
     font: {
         name: 'Times New Roman',
         family: 1,
-        size: 12,
+        size: 14,
         bold: true
     },
 	alignment: {
@@ -71,6 +71,6 @@ export const FORMAT_TITLE_CELL: Partial<Style> = {
     fill: {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: {argb: 'FFFDE9D9'}
+        fgColor: {argb: 'FFACD3E6'}
     }
 };
