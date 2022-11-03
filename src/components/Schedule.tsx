@@ -2,6 +2,7 @@ import WeekOfCourses from "./WeekOfCourses";
 import Course from "./Course";
 import { HEADER_TYPES } from "../constants/HeaderTypes";
 import * as d3 from "d3";
+import { PASTEBIN_MESSAGE } from "../constants/FormDefaultValues";
 
 const NUM_WEEK = 21;
 
@@ -25,10 +26,10 @@ export type ScheduleHeaders = {
 }
 
 export class Schedule {
+    public startDate: Date;
     public scheduleName: string;
     public rawPastebin: string;
     public weeks: WeekOfCourses[];
-    
     private df: d3.DSVRowArray<string> | undefined;
     private headers: ScheduleHeaders;
     private _isValidSchedule: boolean;
@@ -36,17 +37,20 @@ export class Schedule {
     get isValidSchedule() {return this._isValidSchedule;}
 
     constructor() {
+        this.startDate = new Date(Date.now());
+        this.scheduleName = "THỜI KHÓA BIỂU LỚP";
         this.rawPastebin = "";
-        this.scheduleName = "";
         this.headers = HEADER_TYPES;
         this._isValidSchedule = false;
         this.df = undefined;
-
+        
         this.weeks = [];
-        let currentDate = Date.now();
+        let currentDate = new Date(this.startDate);
         for (let i = 0; i < NUM_WEEK; i++) {
-            this.weeks[i] = new WeekOfCourses(i + 1, currentDate);
+            this.weeks[i] = new WeekOfCourses(i + 1, new Date(currentDate));
+            currentDate.setDate(currentDate.getDate() + 7);
         }
+
     }
 
     private ParseWeeks(): boolean {
@@ -55,7 +59,7 @@ export class Schedule {
             this.df?.forEach(row => {
                 parsedCourse = new Course(
                     row[this.headers.cName.key]!,
-                    this.headers.cType.validity? row[this.headers.cType.key]! : undefined,
+                    this.headers.cType.validity?    row[this.headers.cType.key]! : undefined,
                     row[this.headers.cDates.key]!,
                     row[this.headers.cPeriods.key]!,
                     row[this.headers.cWeeks.key]!
@@ -75,6 +79,13 @@ export class Schedule {
 
     public ParseRawULAWSchedule(): boolean {
         try {
+            // update weeks' date
+            let currentDate = new Date(this.startDate);
+            for (let i = 0; i < NUM_WEEK; i++) {
+                this.weeks[i].weekDate = new Date(currentDate);
+                currentDate.setDate(currentDate.getDate() + 7);
+            }
+
             // TODO: Optimize this
             let extraSpaceRegex = / \ +/gm;
             let whitespaceInQuotationRegex = /\".+[\s\d]*\"/gm;

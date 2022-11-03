@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    code {
+        @apply bg-gray-200; 
+        @apply px-1; 
+        @apply text-red-500
+    }
+
+    h2 {
+        @apply text-center;
+        @apply bg-black;
+        @apply text-white;
+        @apply rounded-lg;
+        @apply px-3;
+        @apply py-2;
+        @apply mb-4;
+        @apply font-bold;
+        @apply text-xl;
+    }
+}
