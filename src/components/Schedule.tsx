@@ -1,8 +1,7 @@
 import WeekOfCourses from "./WeekOfCourses";
 import Course from "./Course";
 import { HEADER_TYPES } from "../constants/HeaderTypes";
-import * as d3 from "d3";
-import { PASTEBIN_MESSAGE } from "../constants/FormDefaultValues";
+import { tsvParse } from "d3";
 
 const NUM_WEEK = 21;
 
@@ -43,7 +42,7 @@ export class Schedule {
         this.headers = HEADER_TYPES;
         this._isValidSchedule = false;
         this.df = undefined;
-        
+
         this.weeks = [];
         let currentDate = new Date(this.startDate);
         for (let i = 0; i < NUM_WEEK; i++) {
@@ -104,7 +103,7 @@ export class Schedule {
             let headerSplit = this.rawPastebin.match(/\n/s);
             this.rawPastebin = this.rawPastebin.slice(0, headerSplit?.index).replaceAll(/ *\d+/g, "").concat(this.rawPastebin.slice(headerSplit?.index));
 
-            this.df = d3.tsvParse(this.rawPastebin);
+            this.df = tsvParse(this.rawPastebin);
             
             // header recognition
             Object.entries(this.headers).forEach(entry => {
