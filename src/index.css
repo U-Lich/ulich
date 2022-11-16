@@ -3,21 +3,43 @@
 @tailwind utilities;
 
 @layer base {
-    code {
-        @apply bg-gray-200; 
-        @apply px-1; 
-        @apply text-red-500
-    }
+  code {
+    @apply bg-gray-200;
+    @apply px-1;
+    @apply text-red-500;
+  }
 
-    h2 {
-        @apply text-center;
-        @apply bg-black;
-        @apply text-white;
-        @apply rounded-lg;
-        @apply px-3;
-        @apply py-2;
-        @apply mb-4;
-        @apply font-bold;
-        @apply text-xl;
-    }
+  h1 {
+    @apply text-white;
+    @apply text-6xl;
+    @apply text-center;
+    @apply font-serif;
+    @apply font-bold;
+    @apply italic;
+    @apply underline;
+    @apply decoration-sky-500;
+    @apply decoration-4;
+  }
+
+  h2 {
+    @apply text-white;
+    @apply text-center;
+    @apply rounded-lg;
+    @apply px-3;
+    @apply py-2;
+    @apply mb-2;
+    @apply font-bold;
+    @apply text-xl;
+  }
+
+  .contentbox {
+    @apply m-2;
+    @apply flex;
+    @apply flex-col;
+    @apply rounded-3xl;
+    @apply bg-accent;
+    @apply pt-4;
+    @apply pb-8;
+    @apply px-6;
+  }
 }
