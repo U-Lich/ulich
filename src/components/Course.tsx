@@ -1,49 +1,41 @@
 const digitsRegex = /\d+/;
-export default class Course {
-  name: string;
-  type: string;
-  date: string;
-  periods: number[];
-  weeks: number[];
+
+/**
+ * Parse a single line of text to a number array of it
+ * @param text single line of text
+ * @returns array of numbers
+ */
+function ParseStringToArray(text: string): number[] {
+  let arr: number[] = [];
+
+  for (let i = 0; i < text.length; i++) {
+    if (text[i].match(digitsRegex) !== null) {
+      arr.push(i + 1);
+    }
+  }
+
+  return arr;
+}
+
+export class Course {
+  public name: string;
+  public type: string;
+  public date: string;
+  public periods: number[];
+  public weeks: number[];
 
   constructor(
     name: string,
     type: string,
-    day: string,
+    date: string,
     period: string,
     week: string
   ) {
     // TODO: implement ID indexing acording to DateStrings.tsx
     this.name = name;
     this.type = type;
-    this.date = day;
-    this.periods = this.#parseAvailablePeriods(period);
-    this.weeks = this.#parseAvailableWeeks(week);
-  }
-
-  #parseAvailablePeriods(text: string): number[] {
-    let periods = [];
-    let len = text.length;
-
-    for (let i = 0; i < len; i++) {
-      if (text[i].match(digitsRegex) !== null) {
-        periods.push(i + 1);
-      }
-    }
-
-    return periods;
-  }
-
-  #parseAvailableWeeks(text: string): number[] {
-    let weeks = [];
-    let len = text.length;
-
-    for (let i = 0; i < len; i++) {
-      if (text[i].match(digitsRegex) !== null) {
-        weeks.push(i + 1);
-      }
-    }
-
-    return weeks;
+    this.date = date;
+    this.periods = ParseStringToArray(period);
+    this.weeks = ParseStringToArray(week);
   }
 }

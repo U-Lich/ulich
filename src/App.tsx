@@ -23,14 +23,14 @@ const App = () => {
         <h1 className="my-4 w-fit self-center p-6">hướng dẫn sử dụng</h1>
         <div className="h-8"></div>
         <div className="contentbox">
-          <h2>Mẫu thời khóa biểu được công cụ hỗ trợ</h2>
+          <h2>Mẫu thời khóa biểu được hỗ trợ</h2>
           <img
             src="/Figure_02_00.svg"
             className="m-4 w-11/12 self-center rounded-lg ring-8 ring-accent-bright ring-offset-2"
           ></img>
         </div>
         <div className="contentbox">
-          <h2>Tóm tắt các bước sử dụng công cụ</h2>
+          <h2>Tóm tắt các bước sử dụng</h2>
           <img
             src="/leaflet.svg"
             className=" m-4 w-11/12 self-center rounded-lg ring-8 ring-accent-bright ring-offset-2"
@@ -43,8 +43,8 @@ const App = () => {
               </li>
               <li>
                 <span className="inline-block font-bold">Bước 2:</span> Chọn
-                ngày <span className=" font-bold">thứ hai đầu tuần</span> khi
-                thời khóa biểu bắt đầu được áp dụng.
+                ngày <b>thứ hai đầu tuần</b> khi thời khóa biểu bắt đầu được áp
+                dụng.
               </li>
               <li>
                 <span className="inline-block font-bold">Bước 3:</span> Nhấn nút
@@ -80,9 +80,9 @@ const App = () => {
           ></img>
           <div className="px-8 pt-4">
             <ol className="list-disc px-5">
-              <li>Ghi nhận tuần thời khóa biểu bắt đầu có hiệu lực.</li>
+              <li>Ghi nhận vào tuần nào thời khóa biểu bắt đầu có hiệu lực.</li>
               <li>
-                Nhập ngày <b>thứ hai</b> của tuần đã ghi nhận vào ô 2.
+                Nhập ngày <b>thứ hai</b> của tuần đó vào ô thử 2.
               </li>
             </ol>
           </div>
@@ -92,12 +92,7 @@ const App = () => {
           <div className="px-8 pt-4 text-justify">
             <span className="inline-block text-justify">
               <ol className="list-disc px-5">
-                <li>Ấn ô/nút 3 để bắt đầu chuyển đổi.</li>
-              </ol>
-              <br />
-              <b>Các lỗi thường thấy và cách khắc phục:</b> <br />
-              <ol className="list-disc px-5">
-                <li>Input one here</li>
+                <li>Ấn nút để bắt đầu chuyển đổi.</li>
               </ol>
             </span>
           </div>
