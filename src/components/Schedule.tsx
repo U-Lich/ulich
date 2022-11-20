@@ -1,5 +1,4 @@
-import { WeekOfCourses } from "./WeekOfCourses";
-import { Course } from "./Course";
+import { WeekOfCourses, Course } from "./WeekOfCourses";
 import { StringCacher } from "./StringCacher";
 import { DATES_DICT } from "../constants/DatesStrings";
 import { HEADER_TYPES } from "../constants/HeaderTypes";

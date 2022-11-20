@@ -1,7 +1,6 @@
 import { saveAs } from "file-saver";
 import React from "react";
 import { Schedule } from "./Schedule";
-import { PASTEBIN_MESSAGE } from "../constants/FormDefaultValues";
 import GenerateSpreadsheet from "./SpreadsheetProccessor";
 import "../index.css";
 import { UlichException } from "./UlichException";
@@ -12,7 +11,7 @@ export default function ScheduleForm() {
   let scheduleObj = new Schedule();
 
   const [startDate, setStartDate] = React.useState(scheduleObj.DateToString());
-  const [rawPastebin, setRawPastebin] = React.useState(PASTEBIN_MESSAGE);
+  const [rawPastebin, setRawPastebin] = React.useState("");
   const [scriptOutput, setScriptOutput] = React.useState(
     "Ấn nút [Convert] trên để chuyển đổi thời khóa biểu"
   );
@@ -52,7 +51,7 @@ export default function ScheduleForm() {
           value={rawPastebin}
           name="rawPastebin"
           onChange={(event) => setRawPastebin(event.target.value)}
-          placeholder={PASTEBIN_MESSAGE}
+          placeholder={"Dán thời khóa biểu vào đây"}
           required={true}
           rows={1}
         />
@@ -68,14 +67,14 @@ export default function ScheduleForm() {
             className="basis-1/3 self-stretch rounded-lg bg-black p-2 text-white transition-all hover:scale-105 focus:scale-105"
             type="submit"
           >
-            Convert
+            Tạo bảng
           </button>
         </div>
       </form>
       <div className="rounded-lg">
         <details className="group rounded-lg bg-gray-100">
           <summary className="flex h-min cursor-pointer list-none flex-row justify-between rounded-lg bg-gray-100 p-4 text-center font-bold transition-all group-open:bg-gray-200">
-            <div className="">Conversion output</div>
+            <div className="">Kết quả</div>
             <div className="h-2/3 self-center border-8 border-transparent border-l-black transition-transform group-open:translate-y-1 group-open:rotate-90"></div>
           </summary>
           <div className=" h-40 w-64 self-stretch overflow-y-scroll rounded-lg px-5 py-2">

@@ -1,4 +1,4 @@
-import ExcelJS from "exceljs";
+import { Workbook, Cell, Row } from "exceljs";
 
 import {
   FORMAT_CELL_SIZE,
@@ -29,10 +29,7 @@ const WEEK_LABELS = [
  * @param workbook the workbook to write to
  * @returns that workbook
  */
-function ParseSchedule(
-  schedule: Schedule,
-  workbook: ExcelJS.Workbook
-): ExcelJS.Workbook {
+function ParseSchedule(schedule: Schedule, workbook: Workbook): Workbook {
   const worksheet = workbook.addWorksheet("Summary", {
     pageSetup: {
       paperSize: 9,
@@ -64,7 +61,7 @@ function ParseSchedule(
     cell.style = FORMAT_NORMAL_CELL;
   });
 
-  let currentRow: ExcelJS.Row;
+  let currentRow: Row;
   schedule.weeks.forEach((week) => {
     worksheet.addRow(WEEK_LABELS, "i");
 
@@ -82,7 +79,7 @@ function ParseSchedule(
  * Format a prepared workbook with pre-defined properties
  * @returns that workbook
  */
-function GetFormattedWorkbook(workbook: ExcelJS.Workbook): ExcelJS.Workbook {
+function GetFormattedWorkbook(workbook: Workbook): Workbook {
   const worksheet = workbook.worksheets[0];
   const spsheetRange = {
     s: {
@@ -106,7 +103,7 @@ function GetFormattedWorkbook(workbook: ExcelJS.Workbook): ExcelJS.Workbook {
   worksheet.getRow(1).height = FORMAT_CELL_SIZE.HEIGHT.SPECIAL;
 
   // merge and format the rest
-  let cell: ExcelJS.Cell;
+  let cell: Cell;
   for (
     let i = spsheetRange.s.r + 1;
     i <= spsheetRange.e.r;
@@ -140,7 +137,7 @@ function GetFormattedWorkbook(workbook: ExcelJS.Workbook): ExcelJS.Workbook {
  * @param workbook the workbook to write to
  * @returns that workbook
  */
-function InitiateWorkbook(workbook: ExcelJS.Workbook): ExcelJS.Workbook {
+function InitiateWorkbook(workbook: Workbook): Workbook {
   workbook.creator = CREATOR_NAME;
   workbook.lastModifiedBy = CREATOR_NAME;
   workbook.created = new Date(Date.now());
@@ -155,10 +152,8 @@ function InitiateWorkbook(workbook: ExcelJS.Workbook): ExcelJS.Workbook {
  * @param schedule a schedule object to parse
  * @returns a workbook containing the schedule
  */
-export default function GenerateSpreadsheet(
-  schedule: Schedule
-): ExcelJS.Workbook {
-  let workbook = InitiateWorkbook(new ExcelJS.Workbook());
+export default function GenerateSpreadsheet(schedule: Schedule): Workbook {
+  let workbook = InitiateWorkbook(new Workbook());
 
   return GetFormattedWorkbook(ParseSchedule(schedule, workbook));
 }
