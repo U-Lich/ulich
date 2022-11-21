@@ -5,6 +5,13 @@ export class UlichException extends Error {
   }
 }
 
+export class MissingHeaderException extends UlichException {
+  constructor(message: string, which: string) {
+    super(message);
+    this.name = "MissingHeaderException";
+    this.message = `Missing header(s) ${which}: ${message}`;
+  }
+}
 export class InvalidHeaderException extends UlichException {
   constructor(message: string, which: string) {
     super(message);
@@ -13,10 +20,18 @@ export class InvalidHeaderException extends UlichException {
   }
 }
 
-export class InvalidDateTypeException extends UlichException {
+export class InvalidDataTypeException extends UlichException {
   constructor(message: string, which: string) {
     super(message);
-    this.name = "InvalidDateTypeException";
-    this.message = `Invalid date type ${which}: ${message}`;
+    this.name = "InvalidDataTypeException";
+    this.message = `Invalid data type ${which}: ${message}`;
+  }
+}
+
+export class MissingDataException extends UlichException {
+  constructor(message: string, which: string) {
+    super(message);
+    this.name = "MissingDataException";
+    this.message = `Missing data ${which}: ${message}`;
   }
 }

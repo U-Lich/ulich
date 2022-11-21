@@ -22,6 +22,7 @@ export const HEADER_TYPES: ScheduleHeaders = {
       "Số Thứ Tự",
       "Số thứ tự",
     ],
+    regex: /\d+/gmu,
   },
   cId: {
     key: "id",
@@ -41,6 +42,7 @@ export const HEADER_TYPES: ScheduleHeaders = {
       "Lớp Học Phần",
       "Lớp học phần",
     ],
+    regex: /[^\r\n\t\f\v]+/gmu,
   },
   cGroup: {
     key: "group",
@@ -60,6 +62,7 @@ export const HEADER_TYPES: ScheduleHeaders = {
       "Nhóm Thảo Luận",
       "Nhóm thảo luận",
     ],
+    regex: /[^\r\n\t\f\v]+/gmu,
   },
   cName: {
     key: "name",
@@ -79,6 +82,7 @@ export const HEADER_TYPES: ScheduleHeaders = {
       "Tên Học Phần",
       "Tên học phần",
     ],
+    regex: /[^\r\n\t\f\v]+/gmu,
   },
   cType: {
     key: "type",
@@ -98,25 +102,30 @@ export const HEADER_TYPES: ScheduleHeaders = {
       "Loại Học Phần",
       "Loại học phần",
     ],
+    regex: /[^\r\n\t\f\v]+/gmu,
   },
   cDates: {
     key: "dates",
     validity: false,
     value: ["Thứ", "Thu", "Thöù", "Thứ"],
+    regex: /[^\r\n\t\f\v]+/gmu,
   },
   cPeriods: {
     key: "periods",
     validity: false,
     value: ["Tiết", "Tiet", "Tieát", "Tiết"],
+    regex: /[-_]*([-_]*\d+[-_]*)+/g,
   },
   cRoom: {
     key: "room",
     validity: false,
     value: ["Phòng", "Phong", "Phoøng", "Phòng"],
+    regex: /[^\r\n\t\f\v]+/gmu,
   },
   cWeeks: {
     key: "weeks",
     validity: false,
     value: ["Tuần học", "Tuan hoc", "Tuaàn hoïc", "Tuần học"],
+    regex: /[-_]*([-_]*\d+[-_]*)+/g,
   },
 };

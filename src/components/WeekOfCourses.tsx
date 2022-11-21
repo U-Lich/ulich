@@ -34,7 +34,6 @@ export class Course {
     period: string,
     week: string
   ) {
-    // TODO: implement ID indexing acording to DateStrings.tsx
     this.name = name;
     this.type = type;
     this.date = date;
@@ -55,11 +54,6 @@ type CacheEquivalentPair = {
 type Cell = {
   r: number;
   c: number;
-};
-
-type CellRange = {
-  s: Cell;
-  e: Cell;
 };
 
 /**
@@ -95,8 +89,22 @@ export class WeekOfCourses {
   private weekNumber: number;
   private weekHeader: string;
 
-  private weekDate: Date;
   private courses: {
+    T2: {
+      [name: string]: Course;
+    };
+    T3: {
+      [name: string]: Course;
+    };
+    T4: {
+      [name: string]: Course;
+    };
+    T5: {
+      [name: string]: Course;
+    };
+    T6: {
+      [name: string]: Course;
+    };
     [name: string]: {
       [name: string]: Course;
     };
@@ -104,8 +112,7 @@ export class WeekOfCourses {
 
   constructor(week: number, from: Date) {
     this.weekNumber = week;
-    this.weekDate = from;
-    this.weekHeader = ""; // will be set in ParseDate()
+    this.weekHeader = this.ParseDate(from); // will be set in ParseDate()
     this.courses = {
       T2: {},
       T3: {},
@@ -113,16 +120,20 @@ export class WeekOfCourses {
       T5: {},
       T6: {},
     };
+  }
 
-    this.ParseDate(); // actually set weekHeader
+  // function to reset the week
+  public reset() {
+    for (const key in this.courses) {
+      this.courses[key] = {};
+    }
   }
 
   /**
    * weekDate setter
    */
   public setDate(date: Date) {
-    this.weekDate = date;
-    this.ParseDate();
+    this.weekHeader = this.ParseDate(date);
   }
 
   /**
@@ -179,18 +190,19 @@ export class WeekOfCourses {
   /**
    * Parse Date into formatted date string for the spreadsheet
    */
-  private ParseDate() {
+  private ParseDate(date: Date): string {
     // generate week's date string
-    let to = new Date(this.weekDate);
+    let to = new Date(date);
     to.setDate(to.getDate() + 4);
 
-    this.weekHeader =
+    return (
       String(this.weekNumber) +
       "\n" +
-      this.weekDate.toISOString().substring(0, 10) +
+      date.toISOString().substring(0, 10) +
       "\n" +
       "-" +
       "\n" +
-      to.toISOString().substring(0, 10);
+      to.toISOString().substring(0, 10)
+    );
   }
 }
