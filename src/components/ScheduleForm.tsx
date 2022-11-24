@@ -3,7 +3,7 @@ import React from "react";
 import { Schedule } from "./Schedule";
 import GenerateSpreadsheet from "./SpreadsheetProccessor";
 import "../index.css";
-import { UlichException } from "./UlichException";
+import { UlichError } from "./UlichError";
 
 // Blob type to be used in saveAs
 const BLOB_TYPE =
@@ -45,7 +45,7 @@ export default function ScheduleForm() {
           saveAs(blob, "schedule.xlsx");
         });
     } catch (error) {
-      if (error instanceof UlichException) {
+      if (error instanceof UlichError) {
         setScriptOutput(error.message);
         setIsSuccessful(false);
       } else {
@@ -72,7 +72,7 @@ export default function ScheduleForm() {
           }}
           placeholder={"Dán thời khóa biểu vào đây"}
           required={true}
-          rows={1}
+          rows={3}
         />
         <div className="flex h-14 flex-row gap-2 self-stretch">
           <input
@@ -89,17 +89,15 @@ export default function ScheduleForm() {
             className="basis-1/3 self-stretch rounded-lg bg-black p-2 text-white transition-all hover:scale-105 focus:scale-105"
             type="submit"
           >
-            Nhập
+            Chuyển
           </button>
         </div>
       </form>
       <div className="rounded-lg">
         <details
           className={
-            "group rounded-lg bg-gray-100 " +
-            (!isSuccessful && !isAwaiting
-              ? "ring-2 ring-red-300"
-              : "ring-2 ring-green-300")
+            "group rounded-lg border-2 border-solid bg-gray-100 transition-all hover:scale-105 " +
+            (!isSuccessful && !isAwaiting ? "border-red-300" : "border-black")
           }
           open={!isSuccessful}
         >

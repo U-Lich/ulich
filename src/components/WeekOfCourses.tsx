@@ -1,4 +1,3 @@
-import { DATES_DICT } from "../constants/DatesStrings";
 import { StringCacher } from "./StringCacher";
 
 const digitsRegex = /\d+/;
@@ -46,16 +45,6 @@ const DATES_CACHE_LEVEL = 1;
 const MAX_NUM_SHEET_COLUMNS = 7;
 export const MAX_NUM_PERIODS = 12;
 
-type CacheEquivalentPair = {
-  cache: StringCacher;
-  eq: number;
-};
-
-type Cell = {
-  r: number;
-  c: number;
-};
-
 /**
  * Shift an integer
  * @param x integer
@@ -67,13 +56,13 @@ function ShiftEquation(x: number) {
 
 export class WeekOfCourses {
   private static dates: {
-    [name: string]: CacheEquivalentPair;
+    [name: string]: number;
   } = {
-    T2: { cache: new StringCacher(DATES_CACHE_LEVEL, DATES_DICT["T2"]), eq: 0 },
-    T3: { cache: new StringCacher(DATES_CACHE_LEVEL, DATES_DICT["T3"]), eq: 1 },
-    T4: { cache: new StringCacher(DATES_CACHE_LEVEL, DATES_DICT["T4"]), eq: 2 },
-    T5: { cache: new StringCacher(DATES_CACHE_LEVEL, DATES_DICT["T5"]), eq: 3 },
-    T6: { cache: new StringCacher(DATES_CACHE_LEVEL, DATES_DICT["T6"]), eq: 4 },
+    T2: 0,
+    T3: 1,
+    T4: 2,
+    T5: 3,
+    T6: 4,
   };
 
   private static COURSE_TYPE_FILTER = new StringCacher(1, [
@@ -157,18 +146,18 @@ export class WeekOfCourses {
     // place courses into the array based on their period
     // eq is the equivalent integer of the days in the week
     // For each day in the week,
-    Object.entries(WeekOfCourses.dates).forEach(([key, cacheEquiv]) => {
+    Object.entries(WeekOfCourses.dates).forEach(([key, equivalent]) => {
       // we look at the courses in that day,
       Object.entries(this.courses[key]).forEach(([period, course]) => {
         // NOTE: weekArray (0-indexed) 's period rows start at 0 but periods are 1-indexed
-        // NOTE: dates' columns start at 2 but cacheEquiv is 0-indexed
+        // NOTE: dates' columns start at 2 but their number equivalent is 0-indexed
 
         // and we place the course in the corresponding period and day.
-        weekArray[Number(period) - 1][cacheEquiv.eq + 2] = course.name;
+        weekArray[Number(period) - 1][equivalent + 2] = course.name;
 
         // if it's not a theory course, we add the course's type
         if (!WeekOfCourses.COURSE_TYPE_FILTER.includes(course.type)) {
-          weekArray[Number(period) - 1][cacheEquiv.eq + 2] +=
+          weekArray[Number(period) - 1][equivalent + 2] +=
             " (" + course.type + ")";
         }
       });

@@ -12,6 +12,9 @@ module.exports = {
       screens: {
         tall: { raw: "(min-height: 640px)" },
       },
+      listStyleType: {
+        square: "square",
+      },
     },
   },
   plugins: [],

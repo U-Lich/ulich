@@ -4,9 +4,15 @@
 
 @layer base {
   code {
-    @apply bg-gray-200;
+    @apply bg-white;
+    @apply bg-opacity-10;
     @apply px-1;
-    @apply text-red-500;
+    @apply text-white;
+    @apply font-bold;
+    @apply font-mono;
+    @apply rounded-lg;
+    @apply px-4;
+    @apply py-1;
   }
 
   h1 {

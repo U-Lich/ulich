@@ -3,11 +3,7 @@ import { StringCacher } from "./StringCacher";
 import { DATES_DICT } from "../constants/DatesStrings";
 import { HEADER_TYPES } from "../constants/HeaderTypes";
 import { DSVRowArray, tsvParse } from "d3";
-import {
-  InvalidDataTypeException,
-  MissingDataException,
-  MissingHeaderException,
-} from "./UlichException";
+import { InvalidDataTypeError, MissingHeaderError } from "./UlichError";
 
 const NUM_WEEK = 21;
 const DATE_CACHE_LEVEL = 2;
@@ -110,33 +106,28 @@ export class Schedule {
       this.headers.cType,
     ];
 
-    let missingHeaderMessage = "";
-    let invalidDataMessage = "";
+    let missingHeaderMessage: string[] = [];
 
     coreHeaders.forEach((header) => {
       if (!header.validity) {
-        missingHeaderMessage += header.value[0] + ", ";
+        missingHeaderMessage.push(header.value[0]);
       } else {
         this.df!.forEach((row) => {
           let mat = row[header.key]!.match(header.regex);
           if (mat === null || mat.length > 1 || mat[0] !== row[header.key]!) {
-            invalidDataMessage += row[header.key]! + ", ";
+            throw new InvalidDataTypeError(
+              `Tìm thấy dữ liệu không hợp lệ cho cột ${header.key}`,
+              Object.values(row).join(", ")
+            );
           }
         });
       }
     });
 
     if (missingHeaderMessage.length > 0) {
-      throw new MissingHeaderException(
-        "Could not parse headers from raw text!",
+      throw new MissingHeaderError(
+        "Thiếu các tiêu đề không thể thiếu",
         missingHeaderMessage
-      );
-    }
-
-    if (invalidDataMessage.length > 0) {
-      throw new InvalidDataTypeException(
-        "Could not parse data from raw text!",
-        invalidDataMessage
       );
     }
 
@@ -204,7 +195,9 @@ export class Schedule {
     let headerSplitArray = pastebin.match(/^.+$/m);
 
     if (headerSplitArray === null) {
-      throw new MissingDataException("No data found!", "Header row");
+      throw new MissingHeaderError("Không thể tìm được tiêu đề: ", [
+        "Hàng đầu tiên",
+      ]);
     }
 
     // remove digits from headerSplitArray[0]
@@ -226,11 +219,11 @@ export class Schedule {
    * @param dateString the string to parse, see DateString for more info
    * @returns key of the date string
    */
-  private ParseDateStringToKey(dateString: string): string {
+  private ParseDateStringToKey(dateString: string): string | undefined {
     let found = "";
     // return immediately if found
     Object.entries(this.dateStringCachers).forEach(([key, cacheArray]) => {
-      if (cacheArray.softIncludes(dateString)) {
+      if (cacheArray.softSearch(dateString, 2)) {
         found = key;
       }
     });
@@ -241,7 +234,7 @@ export class Schedule {
 
     // use long thorough search
     Object.entries(this.dateStringCachers).forEach(([key, cacheArray]) => {
-      if (cacheArray.includes(dateString)) {
+      if (cacheArray.search(dateString)) {
         found = key;
       }
     });
@@ -250,10 +243,7 @@ export class Schedule {
       return found;
     }
 
-    throw new InvalidDataTypeException(
-      "Could not read data string!",
-      dateString
-    );
+    return undefined;
   }
 
   /**
@@ -263,10 +253,18 @@ export class Schedule {
   private ParseWeeks(): boolean {
     let parsedCourse: Course;
     this.df!.forEach((row) => {
+      let date = this.ParseDateStringToKey(row[this.headers.cDates.key]!);
+      if (date === undefined) {
+        throw new InvalidDataTypeError(
+          "Tìm thấy dữ liệu không hợp lệ tại cột ngày học: ",
+          Object.values(row).join(", ")
+        );
+      }
+
       parsedCourse = new Course(
         row[this.headers.cName.key]!,
         row[this.headers.cType.key]!,
-        this.ParseDateStringToKey(row[this.headers.cDates.key]!),
+        date,
         row[this.headers.cPeriods.key]!,
         row[this.headers.cWeeks.key]!
       );
