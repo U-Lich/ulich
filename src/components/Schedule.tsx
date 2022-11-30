@@ -126,7 +126,7 @@ export class Schedule {
 
     if (missingHeaderMessage.length > 0) {
       throw new MissingHeaderError(
-        "Thiếu các tiêu đề không thể thiếu",
+        "Thiếu các tiêu đề quan trọng",
         missingHeaderMessage
       );
     }
