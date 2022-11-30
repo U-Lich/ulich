@@ -9,6 +9,9 @@ module.exports = {
         accent: "#001b41",
         "accent-bright": "#434c6d",
       },
+      width: {
+        384: "96rem",
+      },
       screens: {
         tall: { raw: "(min-height: 640px)" },
       },

@@ -3,10 +3,12 @@
   "private": true,
   "version": "0.0.2",
   "type": "module",
+  "homepage": "https://github.com/ulich/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "tsc && vite build && gh-pages -d dist -r git@github.com:U-Lich/u-lich.github.io.git"
   },
   "dependencies": {
     "d3": "^7.6.1",
@@ -23,6 +25,7 @@
     "@vitejs/plugin-react": "^2.1.0",
     "autoprefixer": "^10.4.9",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^4.0.0",
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
