@@ -63,7 +63,7 @@ export default function ScheduleForm() {
         className="flex flex-col items-center gap-5"
       >
         <textarea
-          className="resize-none self-stretch rounded-lg border-2 border-dashed border-gray-600 bg-white px-4 py-2 text-center outline-none transition-all hover:scale-105 focus:scale-105 focus:outline-none"
+          className="resize-none self-stretch rounded-lg border-2 border-dashed border-gray-600 bg-white px-4 py-2 outline-none transition-all scrollbar-thin scrollbar-track-gray-200 scrollbar-thumb-gray-400 scrollbar-track-rounded-full scrollbar-thumb-rounded-full focus:scale-105 focus:outline-none hover:scale-105"
           value={rawPastebin}
           name="rawPastebin"
           onChange={(event) => {
@@ -76,7 +76,7 @@ export default function ScheduleForm() {
         />
         <div className="flex h-14 flex-row gap-2 self-stretch">
           <input
-            className="basis-2/3 self-stretch rounded-lg border-2 border-solid border-black bg-white px-5 transition-all hover:scale-105 focus:scale-105"
+            className="basis-2/3 self-stretch rounded-lg border-2 border-solid border-black bg-white px-5 transition-all focus:scale-105 hover:scale-105"
             value={startDate}
             type="date"
             name="startDate"
@@ -86,7 +86,7 @@ export default function ScheduleForm() {
             }}
           />
           <button
-            className="basis-1/3 self-stretch rounded-lg bg-black p-2 text-white transition-all hover:scale-105 focus:scale-105"
+            className="basis-1/3 self-stretch rounded-lg bg-black p-2 text-white transition-all focus:scale-105 hover:scale-105"
             type="submit"
           >
             Chuyển
